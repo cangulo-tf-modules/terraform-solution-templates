@@ -1,0 +1,29 @@
+name: 'cangulo-example-composite-gh-action'
+description: 'This is an example of a gh-action created using repo-ruler'
+
+# workflow created using [repos-ruler](https://github.com/cangulo-actions/repos-ruler). 
+# Template: action.yml.tftpl - 0.0.0.1
+
+inputs:
+  who-to-greet:  # id of input
+    description: 'Who to greet'
+    required: true
+    default: 'World'
+
+outputs:
+  random-number:
+    description: "Random number"
+    value: ${{ steps.random-number-generator.outputs.random-number }}
+
+runs:
+  using: "composite"
+  steps:
+    - run: echo Hello ${{ inputs.who-to-greet }}.
+      shell: bash
+    - id: random-number-generator
+      run: echo "random-number=$$(echo $RANDOM)" >> $GITHUB_OUTPUT
+      shell: bash
+    - run: echo "${{ github.action_path }}" >> $GITHUB_PATH
+      shell: bash
+    - run: goodbye.sh
+      shell: bash
